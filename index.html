@@ -1,17 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
-	
+<html>
+  <head>
+    <title>Flickr JSON</title>
+  </head>
 <body>
+<div class="container">
+        <div id="content">
+            <input id="search" type="text" placeholder="search text" />
+            <button id="submit" onclick="jsonFlickrApi()">Submit</button>
+            <div id="outputDiv"></div>
+        </div>
+    </div>
+
+
   <script>
-  function jsonFlickrApi(rsp) {
-    window.rsp = rsp;
+  function jsonFlickrApi() {
+  
+  
+  var xhttp = new XMLHttpRequest();
+  var url = "https://api.flickr.com/services/feeds/photos_public.gne?format=json&tags=" + document.getElementById("search").value;;
+  //var url = "http://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=e4322cca6910adc6d641f0d3cc8d7b48&tags=flower&per_page=50&format=json";
+  //var url = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=e4322cca6910adc6d641f0d3cc8d7b48&tags="+ document.getElementById("search").value + "&per_page=100&format=json&page=2";
+    xhttp.open("GET", url, true);
+    //xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send();
+    var response = JSON.parse(xhttp.responseText);
+    
     var s = "";
     // http://farm{id}.static.flickr.com/{server-id}/{id}_{secret}_[mstb].jpg
     // http://www.flickr.com/photos/{user-id}/{photo-id}
-    s = "total number is: " + rsp.photos.photo.length + "<br/>";
+    s = "total number is: " + response.photos.photo.length + "<br/>";
     
-    for (var i=0; i < rsp.photos.photo.length; i++) {
-      photo = rsp.photos.photo[i];
+    for (var i=0; i < response.photos.photo.length; i++) {
+      photo = response.photos.photo[i];
       t_url = "http://farm" + photo.farm + ".static.flickr.com/" + 
         photo.server + "/" + photo.id + "_" + photo.secret + "_" + "t.jpg";
       p_url = "http://www.flickr.com/photos/" + photo.owner + "/" + photo.id;
@@ -21,7 +42,7 @@
     document.writeln(s);
   }
   </script>
-  <script src="http://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=e4322cca6910adc6d641f0d3cc8d7b48&tags=flower&per_page=100&format=json&page=2"></script>
+  
 </body>
 
 </html>

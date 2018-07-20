@@ -7,42 +7,72 @@
 <div class="container">
         <div id="content">
             <input id="search" type="text" placeholder="search text" />
-            <button id="submit" onclick="jsonFlickrApi()">Submit</button>
+            <button id="submit" >Submit</button>
             <div id="outputDiv"></div>
         </div>
     </div>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+$("#submit").click(function(){
+ jQuery('#a-link').remove();
+                
+               
+$(".image-container").remove();
+var contents = $('#search').val();
+$.getJSON('https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=ca370d51a054836007519a00ff4ce59e&tags='+contents +'&per_page=50&format=json&nojsoncallback=1',
+function(data){
+$.each(data.photos.photo, function(i,item){
+ var photoURL = 'http://farm' + item.farm + '.static.flickr.com/' + item.server + '/' + item.id + '_' + item.secret + '_m.jpg';
+ var photoID = item.id;
 
-  <script>
-  function jsonFlickrApi() {
-  
-  
-  var xhttp = new XMLHttpRequest();
-  var url = "https://api.flickr.com/services/feeds/photos_public.gne?format=json&tags=" + document.getElementById("search").value;;
-  //var url = "http://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=e4322cca6910adc6d641f0d3cc8d7b48&tags=flower&per_page=50&format=json";
-  //var url = "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=e4322cca6910adc6d641f0d3cc8d7b48&tags="+ document.getElementById("search").value + "&per_page=100&format=json&page=2";
-    xhttp.open("GET", url, true);
-    //xhttp.setRequestHeader("Content-type", "application/json");
-    xhttp.send();
-    var response = JSON.parse(xhttp.responseText);
-    
-    var s = "";
-    // http://farm{id}.static.flickr.com/{server-id}/{id}_{secret}_[mstb].jpg
-    // http://www.flickr.com/photos/{user-id}/{photo-id}
-    s = "total number is: " + response.photos.photo.length + "<br/>";
-    
-    for (var i=0; i < response.photos.photo.length; i++) {
-      photo = response.photos.photo[i];
-      t_url = "http://farm" + photo.farm + ".static.flickr.com/" + 
-        photo.server + "/" + photo.id + "_" + photo.secret + "_" + "t.jpg";
-      p_url = "http://www.flickr.com/photos/" + photo.owner + "/" + photo.id;
-      s +=  '<a href="' + p_url + '">' + '<img alt="'+ photo.title + 
-        '"src="' + t_url + '"/>' + '</a>';
-    }
-    document.writeln(s);
-  }
-  </script>
-  
-</body>
+ var imgCont = '<div class="image-container" style="background: url(' + photoURL + ');"><div class="image-info"><p class="top"><a class="title" href="http://www.flickr.com/photos/' + 
+							item.owner + '/' + photoID + '">' + "hey" + '</a> ' + 
+							 '</a></span></p>';
+ $(imgCont).appendTo('#image-container');
+ });
+});
+$('.image-container').live('mouseover', function(){
+                    $(this).children('div').attr('class', 'image-info-active');
+                });
+                $('.image-container').live('mouseout', function(){
+                    $(this).children('div').attr('class', 'image-info');
+                });
+                
+                jQuery('#loader').remove();
 
-</html>
+});
+
+
+</script>
+<style type="text/css">
+            body, html {background: #000; font-size: 12px;}
+            #container {width: 810px; margin: 0 auto 0 auto;}
+            #notice {color: #fff; font-weight: bold; font-size: 15px; font-style: italic;}
+            h1 {font-size: 38px; line-height: 45px;}
+            h1 span {font-size: 16px; color: #ff0084;}
+            h1 a:hover span {color: #fff;}
+            #tut-info {width: 810px; margin: 0 0 20px 0;}
+            #tut-info a {float: left; display: block; background: #fff; font-size: 20px; padding: 20px 20px; font-weight: bold; margin: 0 15px 0 0;}
+            #tut-info a:hover {background: #ff0084;}            
+            #loader {margin: 20px 0 40px 350px;}
+            .image-container {height: 180px; width: 240px; position: relative; float: left; margin: 0 20px 20px 0; background-color: #666; border: 5px solid #fff; overflow: hidden;}
+            .image-info {display: none;}
+            .image-info-active {height: 180px; width: 240px; background: rgba(255,255,255,.85);}
+            a {cursor: pointer; text-decoration: none; color: #0063dc;}
+            a:hover {color: #fff; background: #0063dc;}
+            a.title {color: #ff0084;}
+            a.title:hover {color: #fff; background: #ff0084;}
+            .bottom {padding: 5px;}
+            .bottom p {margin: 0 0 5px 0; }
+            p.top {background: #fff; width: 240px; padding: 0 0 5px 0; margin: 0;}
+            a.title {font-size: 20px; font-weight: bold; display: block; line-height: 20px;}
+            span.author {font-size: 10px;}
+            .infoTitle {font-weight: bold; text-trasnform: uppercase;}
+            .clearfix:after { content:"."; display:block; height:0; clear:both; visibility:hidden; }
+            .clearfix {display:inline-block;}
+            .clearfix {display:block;}
+		</style> 
+
+		<div id="container"> 
+<div id="image-container" class="clearfix"> </div></div>

@@ -8,15 +8,23 @@
         <div id="content">
             <input id="search" type="text" placeholder="search text" />
             <button id="submit" >Submit</button>
-            <div id="outputDiv"></div>
+			<button id="download" >Download pics</button>
+           
         </div>
+		
+		<div id="image-container" class="clearfix"> </div>
+		
     </div>
-
+	
+	
+	
+</body>
+<iframe id="my_iframe" style="display:none;"></iframe>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script>
 $("#submit").click(function(){
  jQuery('#a-link').remove();
-                
+var links = [];                
                
 $(".image-container").remove();
 var contents = $('#search').val();
@@ -27,19 +35,22 @@ $.each(data.photos.photo, function(i,item){
  var photoID = item.id;
 
  var imgCont = '<div class="image-container" style="background: url(' + photoURL + ');"><div class="image-info"><p class="top"><a class="title" href="http://www.flickr.com/photos/' + 
-							item.owner + '/' + photoID + '">' + "hey" + '</a> ' + 
+							item.owner + '/' + photoID + '">' + item.title + '</a> ' + 
 							 '</a></span></p>';
  $(imgCont).appendTo('#image-container');
  
  });
  $(".image-container").click(function(){
-$(this).children('div').attr('class', 'image-info-active').toggle();
-
-
+ $(this).children('div').attr('class', 'image-info-active');
+//$(this).children('div').attr('class', 'image-info-active').toggle();
+//alert($(this).children('div').find('a:first').attr('href'));
+//links.push($(this).children('div').find('a:first').attr('href'));
+ 
 	});
 });
 
                 jQuery('#loader').remove();
+				
 
 });
 
@@ -74,5 +85,3 @@ $(this).children('div').attr('class', 'image-info-active').toggle();
             .clearfix {display:block;}
 		</style> 
 
-		<div id="container"> 
-<div id="image-container" class="clearfix"> </div></div>

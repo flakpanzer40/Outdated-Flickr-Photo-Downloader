@@ -30,15 +30,15 @@ $.each(data.photos.photo, function(i,item){
 							item.owner + '/' + photoID + '">' + "hey" + '</a> ' + 
 							 '</a></span></p>';
  $(imgCont).appendTo('#image-container');
+ 
  });
+ $(".image-container").click(function(){
+$(this).children('div').attr('class', 'image-info-active').toggle();
+
+
+	});
 });
-$('.image-container').live('mouseover', function(){
-                    $(this).children('div').attr('class', 'image-info-active');
-                });
-                $('.image-container').live('mouseout', function(){
-                    $(this).children('div').attr('class', 'image-info');
-                });
-                
+
                 jQuery('#loader').remove();
 
 });
